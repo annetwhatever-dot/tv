@@ -1,0 +1,102 @@
+import XCTest
+
+@MainActor
+final class MockTV: TVCommunicating {
+    var value = 0
+    var written: [Int] = []
+    var refuseWrite = false
+    func connect(host: String, key: String?, awaitingApproval: @escaping () -> Void) async throws -> String { "test-key" }
+    func brightness() async throws -> Int { value }
+    func setBrightness(_ value: Int) async throws { written.append(value); if !refuseWrite { self.value = value } }
+    func disconnect() {}
+}
+
+@MainActor
+final class MockSonos: SonosCommunicating {
+    var current = SonosState(volume: 45, muted: false)
+    var written: [Int] = []
+    var muteWrites: [Bool] = []
+    func identify(host: String) async throws -> String { "Sonos Arc Ultra" }
+    func state(host: String) async throws -> SonosState { current }
+    func setVolume(_ volume: Int, host: String) async throws {
+        written.append(volume); current = SonosState(volume: volume, muted: current.muted)
+    }
+    func setMuted(_ muted: Bool, host: String) async throws {
+        muteWrites.append(muted); current = SonosState(volume: current.volume, muted: muted)
+    }
+}
+
+final class MemoryPairing: PairingStoring {
+    var keys: [String: String] = [:]
+    func key(for host: String) -> String? { keys[host] }
+    func save(_ key: String, for host: String) throws { keys[host] = key }
+    func remove(for host: String) { keys.removeValue(forKey: host) }
+}
+
+final class ControlTests: XCTestCase {
+    func testOnlyPrivateAddressesAreAccepted() throws {
+        XCTAssertEqual(try LocalAddress.validated("192.168.2.159"), "192.168.2.159")
+        XCTAssertEqual(try LocalAddress.validated(" 10.0.0.7 "), "10.0.0.7")
+        for input in ["127.0.0.1", "0.0.0.0", "8.8.8.8", "192.168.2.159:3000", "192.168.002.159", "172.32.0.2", "192.168.0.999", "example.com"] {
+            XCTAssertThrowsError(try LocalAddress.validated(input), input)
+        }
+    }
+
+    func testBrightnessAcceptsZeroAndNumericStrings() throws {
+        XCTAssertEqual(try LocalAddress.level(NSNumber(value: 0)), 0)
+        XCTAssertEqual(try LocalAddress.level("45"), 45)
+        for invalid in [true, 101, -1, 22.5, "unknown"] as [Any] { XCTAssertThrowsError(try LocalAddress.level(invalid)) }
+    }
+
+    func testSonosXMLIsParsedWithNamespaces() throws {
+        let xml = "<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\"><s:Body><u:GetVolumeResponse xmlns:u=\"urn:schemas-upnp-org:service:RenderingControl:1\"><CurrentVolume>45</CurrentVolume></u:GetVolumeResponse></s:Body></s:Envelope>"
+        XCTAssertEqual(try XMLValues.parse(Data(xml.utf8))["CurrentVolume"], "45")
+    }
+
+    @MainActor
+    func testConnectingReadsLevelsWithoutChangingEitherDevice() async {
+        let tv = MockTV(), sonos = MockSonos(), pairing = MemoryPairing()
+        let defaults = UserDefaults(suiteName: UUID().uuidString)!
+        let store = ControlStore(tv: tv, sonos: sonos, vault: pairing, defaults: defaults)
+        await store.connectTV()
+        await store.connectSonos()
+        XCTAssertEqual(store.brightness, 0)
+        XCTAssertEqual(store.volume, 45)
+        XCTAssertTrue(store.tvConnected)
+        XCTAssertTrue(store.sonosConnected)
+        XCTAssertTrue(tv.written.isEmpty)
+        XCTAssertTrue(sonos.written.isEmpty)
+        XCTAssertTrue(sonos.muteWrites.isEmpty)
+        XCTAssertEqual(pairing.key(for: "192.168.2.159"), "test-key")
+    }
+
+    @MainActor
+    func testBrightnessUsesReadbackAndReportsRejectedChanges() async {
+        let tv = MockTV()
+        let store = ControlStore(tv: tv, sonos: MockSonos(), vault: MemoryPairing(), defaults: UserDefaults(suiteName: UUID().uuidString)!)
+        await store.connectTV()
+        await store.setBrightness(0)
+        XCTAssertEqual(tv.written, [0])
+        XCTAssertFalse(store.tvError)
+        tv.refuseWrite = true
+        await store.setBrightness(5)
+        XCTAssertTrue(store.tvError)
+        XCTAssertEqual(store.brightness, 0)
+        XCTAssertEqual(store.brightnessDraft, 0)
+    }
+
+    @MainActor
+    func testVolumeAndMuteAreIndependentOfTV() async {
+        let tv = MockTV(), sonos = MockSonos()
+        let store = ControlStore(tv: tv, sonos: sonos, vault: MemoryPairing(), defaults: UserDefaults(suiteName: UUID().uuidString)!)
+        await store.connectSonos()
+        await store.setVolume(44)
+        await store.toggleMute()
+        XCTAssertEqual(store.volume, 44)
+        XCTAssertTrue(store.muted)
+        XCTAssertEqual(sonos.written, [44])
+        XCTAssertTrue(tv.written.isEmpty)
+        await store.setVolume(101)
+        XCTAssertEqual(sonos.written, [44])
+    }
+}

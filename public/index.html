@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#101714">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>TV Glow</title>
+  <link rel="icon" href="/assets/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+  <link rel="manifest" href="/assets/manifest.json">
+  <link rel="stylesheet" href="/assets/style.css">
+  <script src="/assets/app.js" defer></script>
+</head>
+<body>
+  <main>
+    <header>
+      <a class="brand" href="/" aria-label="TV Glow home"><span class="brand-icon">✳</span> TV Glow</a>
+      <button class="icon-button" id="settings-toggle" aria-label="Connection settings" aria-expanded="false"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="13" rx="3"/><path d="M8 21h8m-4-4v4"/></svg></button>
+    </header>
+
+    <section class="intro">
+      <div class="eyebrow">YOUR ROOM. YOUR LIGHT.</div>
+      <h1>A little softer.<br>A little brighter.</h1>
+      <p>Settle into the perfect glow.</p>
+    </section>
+
+    <section class="control-card" aria-label="TV brightness">
+      <div class="device-row"><div><span class="device-name">Living room</span><span class="device-model">LG C1 · OLED</span></div><span class="status" id="status"><i></i><span>Not connected</span></span></div>
+      <div class="glow-stage" aria-hidden="true"><div class="halo"></div><div class="orb"></div><span class="orbit orbit-one"></span><span class="orbit orbit-two"></span></div>
+      <div class="reading"><span id="level">—</span><span class="percent">%</span></div>
+      <div class="reading-caption" id="reading-caption">OLED pixel brightness</div>
+      <div class="slider-wrap"><input id="brightness" type="range" min="0" max="100" value="50" aria-label="OLED pixel brightness" disabled><div class="scale"><span>Dim</span><span>Bright</span></div></div>
+      <div class="presets" aria-label="Brightness presets">
+        <button class="preset" data-value="15" disabled><svg viewBox="0 0 24 24"><path d="M20.2 15.5A8.6 8.6 0 0 1 8.5 3.8 8.6 8.6 0 1 0 20.2 15.5Z"/></svg><span>Night</span><small>15%</small></button>
+        <button class="preset" data-value="45" disabled><svg viewBox="0 0 24 24"><path d="M3 17h18M5 21h14M7 17a5 5 0 0 1 10 0M12 3v3M4.2 7.2l2.1 2.1M19.8 7.2l-2.1 2.1M2 12l3 .8M22 12l-3 .8"/></svg><span>Everyday</span><small>45%</small></button>
+        <button class="preset" data-value="80" disabled><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 1v3m0 16v3M1 12h3m16 0h3M4.2 4.2l2.1 2.1m11.4 11.4 2.1 2.1M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg><span>Bright</span><small>80%</small></button>
+      </div>
+      <p id="feedback" role="status" aria-live="polite">Connect your TV to get started.</p>
+    </section>
+
+    <section class="connection" id="connection">
+      <div class="section-top"><h2>Make the connection</h2><span class="step-label">ONE-TIME SETUP</span></div>
+      <p>Switch on your TV and connect it to the same home network as your Mac and phone.</p>
+      <button class="primary" id="discover"><span>Find my TV</span><svg viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></button>
+      <div id="discovery-results" aria-live="polite"></div>
+      <details id="manual"><summary>Connect with an IP address</summary><form id="connect-form"><label for="tv-ip">TV’s IP address</label><div class="input-row"><input id="tv-ip" placeholder="192.168.0.100" inputmode="decimal" autocomplete="off" required aria-describedby="ip-help"><button type="submit" id="connect-button">Connect</button></div><p id="ip-help">On the TV: Settings → General → Network → select your connection → Advanced settings.</p></form></details>
+      <p class="pairing-tip" id="pairing-tip">When the connection request appears on your TV, choose <strong>Accept</strong>.</p>
+    </section>
+
+    <footer><span class="footer-mark">✳</span><p>Just the right amount of light.<br><span>Keep your Mac awake and all devices on the same network.</span></p></footer>
+  </main>
+</body>
+</html>

@@ -1,0 +1,2 @@
+aiohttp>=3.10,<4
+bscpylgtv==0.5.2

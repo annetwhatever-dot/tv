@@ -1,0 +1,8 @@
+.venv/
+.state/
+__pycache__/
+*.log
+native/build/
+native/DerivedData/
+*.xcuserstate
+xcuserdata/

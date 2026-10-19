@@ -1,0 +1,722 @@
+// !$*UTF8*$!
+{
+	"archiveVersion" = 1;
+	"classes" = {
+	};
+	"objectVersion" = 56;
+	"objects" = {
+		"090F4A4998B0767A434E5468" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "App/TVGlowApp.swift";
+			"sourceTree" = "<group>";
+		};
+		"059AA59543761B5D3554A4F6" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Core/ControlStore.swift";
+			"sourceTree" = "<group>";
+		};
+		"447EB0FBA7D179F77596763F" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Core/LocalAddress.swift";
+			"sourceTree" = "<group>";
+		};
+		"82C68ACC7717A5C0781D7C34" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Core/PairingStore.swift";
+			"sourceTree" = "<group>";
+		};
+		"2D262640D97CD5113319883E" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Core/SonosClient.swift";
+			"sourceTree" = "<group>";
+		};
+		"EDACEB87025C7D7B255174AC" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Core/WebOSClient.swift";
+			"sourceTree" = "<group>";
+		};
+		"5BC5BC76298E181F464974CC" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Views/ConnectionView.swift";
+			"sourceTree" = "<group>";
+		};
+		"0F73F8E8D8D936F47AB787DB" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Views/ContentView.swift";
+			"sourceTree" = "<group>";
+		};
+		"03D8D8DA7D80629AC8AB79F6" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Views/MenuControlsView.swift";
+			"sourceTree" = "<group>";
+		};
+		"22A516031E8F1CD4073DF066" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Views/Theme.swift";
+			"sourceTree" = "<group>";
+		};
+		"3685E330EC5277A9DD5661C6" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "folder.assetcatalog";
+			"path" = "Resources/Assets.xcassets";
+			"sourceTree" = "<group>";
+		};
+		"5116EBDA1116969D8CA85F3E" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text.json";
+			"path" = "Resources/WebOSManifest.json";
+			"sourceTree" = "<group>";
+		};
+		"78E10DEC3ABFD4C219E1CA20" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Resources/WebOS-LICENSE.txt";
+			"sourceTree" = "<group>";
+		};
+		"3A2A88DEEFF3D1D23E496597" = {
+			"isa" = "PBXGroup";
+			"path" = "TVGlow";
+			"sourceTree" = "<group>";
+			"children" = (
+				"090F4A4998B0767A434E5468",
+				"059AA59543761B5D3554A4F6",
+				"447EB0FBA7D179F77596763F",
+				"82C68ACC7717A5C0781D7C34",
+				"2D262640D97CD5113319883E",
+				"EDACEB87025C7D7B255174AC",
+				"5BC5BC76298E181F464974CC",
+				"0F73F8E8D8D936F47AB787DB",
+				"03D8D8DA7D80629AC8AB79F6",
+				"22A516031E8F1CD4073DF066",
+				"3685E330EC5277A9DD5661C6",
+				"5116EBDA1116969D8CA85F3E",
+				"78E10DEC3ABFD4C219E1CA20",
+			);
+		};
+		"E05FCB614AB36FDEE72EE1F2" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "ControlTests.swift";
+			"sourceTree" = "<group>";
+		};
+		"8B7A6DECC0651D269EA794C7" = {
+			"isa" = "PBXGroup";
+			"path" = "TVGlowTests";
+			"sourceTree" = "<group>";
+			"children" = (
+				"E05FCB614AB36FDEE72EE1F2",
+			);
+		};
+		"EE44EC02CC9792D5EDBBA009" = {
+			"isa" = "PBXFileReference";
+			"explicitFileType" = "wrapper.application";
+			"includeInIndex" = 0;
+			"path" = "TV Glow.app";
+			"sourceTree" = "BUILT_PRODUCTS_DIR";
+		};
+		"A5130A18D643F7D01460AB4E" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "090F4A4998B0767A434E5468";
+		};
+		"960A5902C5C1BAD18B01CCFD" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "059AA59543761B5D3554A4F6";
+		};
+		"008281EAA3859846295A086D" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "447EB0FBA7D179F77596763F";
+		};
+		"9FD87FB1C0916F602322FF2D" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "82C68ACC7717A5C0781D7C34";
+		};
+		"08B9692C1C65C06808EFEDF4" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "2D262640D97CD5113319883E";
+		};
+		"9A9461CF39A3A668D5FF647F" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "EDACEB87025C7D7B255174AC";
+		};
+		"E1F426067CF15ABD76718DD4" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "5BC5BC76298E181F464974CC";
+		};
+		"48F1DA21A12B5AE9E41E3E67" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "0F73F8E8D8D936F47AB787DB";
+		};
+		"1F79B90ED6FE6CF85419EC5E" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "03D8D8DA7D80629AC8AB79F6";
+		};
+		"8CBD8FB67DB2FA2D00A54B68" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "22A516031E8F1CD4073DF066";
+		};
+		"19856CDD2973E96290E1EC85" = {
+			"isa" = "PBXSourcesBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = (
+				"A5130A18D643F7D01460AB4E",
+				"960A5902C5C1BAD18B01CCFD",
+				"008281EAA3859846295A086D",
+				"9FD87FB1C0916F602322FF2D",
+				"08B9692C1C65C06808EFEDF4",
+				"9A9461CF39A3A668D5FF647F",
+				"E1F426067CF15ABD76718DD4",
+				"48F1DA21A12B5AE9E41E3E67",
+				"1F79B90ED6FE6CF85419EC5E",
+				"8CBD8FB67DB2FA2D00A54B68",
+			);
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"6803B2C54D0C5C83FACD704F" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "3685E330EC5277A9DD5661C6";
+		};
+		"8B21C9FA1726F70E7844C7BE" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "5116EBDA1116969D8CA85F3E";
+		};
+		"2416E372CCE7F2A7F6FB79C1" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "78E10DEC3ABFD4C219E1CA20";
+		};
+		"3A5835D07B1F2B9AEB0ADC95" = {
+			"isa" = "PBXResourcesBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = (
+				"6803B2C54D0C5C83FACD704F",
+				"8B21C9FA1726F70E7844C7BE",
+				"2416E372CCE7F2A7F6FB79C1",
+			);
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"9F43021F42602B42A6310C36" = {
+			"isa" = "PBXFrameworksBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = (
+			);
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"A4F96B11B306971D4F72CA13" = {
+			"isa" = "XCBuildConfiguration";
+			"name" = "Debug";
+			"buildSettings" = {
+				"SWIFT_VERSION" = "5.0";
+				"MACOSX_DEPLOYMENT_TARGET" = "14.0";
+				"IPHONEOS_DEPLOYMENT_TARGET" = "17.0";
+				"CLANG_ENABLE_MODULES" = "YES";
+				"CLANG_ENABLE_OBJC_ARC" = "YES";
+				"ENABLE_TESTABILITY" = "YES";
+				"GENERATE_INFOPLIST_FILE" = "NO";
+				"INFOPLIST_FILE" = "TVGlow/Config/Info.plist";
+				"CURRENT_PROJECT_VERSION" = "1";
+				"MARKETING_VERSION" = "1.0";
+				"PRODUCT_NAME" = "TV Glow";
+				"PRODUCT_MODULE_NAME" = "TVGlow";
+				"ASSETCATALOG_COMPILER_APPICON_NAME" = "AppIcon";
+				"CODE_SIGN_STYLE" = "Automatic";
+				"SWIFT_EMIT_LOC_STRINGS" = "YES";
+				"LD_RUNPATH_SEARCH_PATHS" = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/Frameworks",
+				);
+				"SDKROOT" = "macosx";
+				"SUPPORTED_PLATFORMS" = "macosx";
+				"PRODUCT_BUNDLE_IDENTIFIER" = "com.anna.tvglow.mac";
+				"CODE_SIGN_IDENTITY" = "-";
+				"CODE_SIGN_ENTITLEMENTS" = "TVGlow/Config/Mac.entitlements";
+				"ENABLE_HARDENED_RUNTIME" = "YES";
+				"SWIFT_OPTIMIZATION_LEVEL" = "-Onone";
+				"DEBUG_INFORMATION_FORMAT" = "dwarf";
+				"SWIFT_ACTIVE_COMPILATION_CONDITIONS" = "DEBUG";
+			};
+		};
+		"5AEC3BC5D1291EA1C3E30E4E" = {
+			"isa" = "XCBuildConfiguration";
+			"name" = "Release";
+			"buildSettings" = {
+				"SWIFT_VERSION" = "5.0";
+				"MACOSX_DEPLOYMENT_TARGET" = "14.0";
+				"IPHONEOS_DEPLOYMENT_TARGET" = "17.0";
+				"CLANG_ENABLE_MODULES" = "YES";
+				"CLANG_ENABLE_OBJC_ARC" = "YES";
+				"ENABLE_TESTABILITY" = "YES";
+				"GENERATE_INFOPLIST_FILE" = "NO";
+				"INFOPLIST_FILE" = "TVGlow/Config/Info.plist";
+				"CURRENT_PROJECT_VERSION" = "1";
+				"MARKETING_VERSION" = "1.0";
+				"PRODUCT_NAME" = "TV Glow";
+				"PRODUCT_MODULE_NAME" = "TVGlow";
+				"ASSETCATALOG_COMPILER_APPICON_NAME" = "AppIcon";
+				"CODE_SIGN_STYLE" = "Automatic";
+				"SWIFT_EMIT_LOC_STRINGS" = "YES";
+				"LD_RUNPATH_SEARCH_PATHS" = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/Frameworks",
+				);
+				"SDKROOT" = "macosx";
+				"SUPPORTED_PLATFORMS" = "macosx";
+				"PRODUCT_BUNDLE_IDENTIFIER" = "com.anna.tvglow.mac";
+				"CODE_SIGN_IDENTITY" = "-";
+				"CODE_SIGN_ENTITLEMENTS" = "TVGlow/Config/Mac.entitlements";
+				"ENABLE_HARDENED_RUNTIME" = "YES";
+				"SWIFT_OPTIMIZATION_LEVEL" = "-O";
+				"DEBUG_INFORMATION_FORMAT" = "dwarf-with-dsym";
+			};
+		};
+		"748F0AFBA4046428773328AD" = {
+			"isa" = "XCConfigurationList";
+			"buildConfigurations" = (
+				"A4F96B11B306971D4F72CA13",
+				"5AEC3BC5D1291EA1C3E30E4E",
+			);
+			"defaultConfigurationIsVisible" = 0;
+			"defaultConfigurationName" = "Release";
+		};
+		"05380E88487458D548BA9E0A" = {
+			"isa" = "PBXNativeTarget";
+			"name" = "TV Glow macOS";
+			"productName" = "TV Glow";
+			"productReference" = "EE44EC02CC9792D5EDBBA009";
+			"productType" = "com.apple.product-type.application";
+			"buildConfigurationList" = "748F0AFBA4046428773328AD";
+			"buildPhases" = (
+				"19856CDD2973E96290E1EC85",
+				"9F43021F42602B42A6310C36",
+				"3A5835D07B1F2B9AEB0ADC95",
+			);
+			"buildRules" = (
+			);
+			"dependencies" = (
+			);
+		};
+		"679D800FB0F7C78048DDEF4D" = {
+			"isa" = "PBXFileReference";
+			"explicitFileType" = "wrapper.application";
+			"includeInIndex" = 0;
+			"path" = "TV Glow.app";
+			"sourceTree" = "BUILT_PRODUCTS_DIR";
+		};
+		"46929218ED671F47E58D776F" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "090F4A4998B0767A434E5468";
+		};
+		"49C4BB09FD4D6A357685B7D6" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "059AA59543761B5D3554A4F6";
+		};
+		"B10766B03199356876C72B72" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "447EB0FBA7D179F77596763F";
+		};
+		"7061BDDA4108E23B8EA60702" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "82C68ACC7717A5C0781D7C34";
+		};
+		"D73490B2AB89249B8E3B9C7E" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "2D262640D97CD5113319883E";
+		};
+		"B32DF558374FFAAF34A59595" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "EDACEB87025C7D7B255174AC";
+		};
+		"286802D84F8B6D99ACEF8570" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "5BC5BC76298E181F464974CC";
+		};
+		"78D708284E28B9E78489589C" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "0F73F8E8D8D936F47AB787DB";
+		};
+		"9A520F54C94CF97183198B02" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "03D8D8DA7D80629AC8AB79F6";
+		};
+		"16427A0CE12362BB7EA822DF" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "22A516031E8F1CD4073DF066";
+		};
+		"9C28F5FF27EF4CDBE4A4B070" = {
+			"isa" = "PBXSourcesBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = (
+				"46929218ED671F47E58D776F",
+				"49C4BB09FD4D6A357685B7D6",
+				"B10766B03199356876C72B72",
+				"7061BDDA4108E23B8EA60702",
+				"D73490B2AB89249B8E3B9C7E",
+				"B32DF558374FFAAF34A59595",
+				"286802D84F8B6D99ACEF8570",
+				"78D708284E28B9E78489589C",
+				"9A520F54C94CF97183198B02",
+				"16427A0CE12362BB7EA822DF",
+			);
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"C8641ABA5A9BBBC5DCDBD6F4" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "3685E330EC5277A9DD5661C6";
+		};
+		"CADD35252E65435C34FC5475" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "5116EBDA1116969D8CA85F3E";
+		};
+		"50C331FF7E1A2B5084FE53FD" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "78E10DEC3ABFD4C219E1CA20";
+		};
+		"088AE5F8F41D5C28D4275F2E" = {
+			"isa" = "PBXResourcesBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = (
+				"C8641ABA5A9BBBC5DCDBD6F4",
+				"CADD35252E65435C34FC5475",
+				"50C331FF7E1A2B5084FE53FD",
+			);
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"07062973FBC66B46BDB40765" = {
+			"isa" = "PBXFrameworksBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = (
+			);
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"452F5A2F7299CED80EEAB184" = {
+			"isa" = "XCBuildConfiguration";
+			"name" = "Debug";
+			"buildSettings" = {
+				"SWIFT_VERSION" = "5.0";
+				"MACOSX_DEPLOYMENT_TARGET" = "14.0";
+				"IPHONEOS_DEPLOYMENT_TARGET" = "17.0";
+				"CLANG_ENABLE_MODULES" = "YES";
+				"CLANG_ENABLE_OBJC_ARC" = "YES";
+				"ENABLE_TESTABILITY" = "YES";
+				"GENERATE_INFOPLIST_FILE" = "NO";
+				"INFOPLIST_FILE" = "TVGlow/Config/Info.plist";
+				"CURRENT_PROJECT_VERSION" = "1";
+				"MARKETING_VERSION" = "1.0";
+				"PRODUCT_NAME" = "TV Glow";
+				"PRODUCT_MODULE_NAME" = "TVGlow";
+				"ASSETCATALOG_COMPILER_APPICON_NAME" = "AppIcon";
+				"CODE_SIGN_STYLE" = "Automatic";
+				"SWIFT_EMIT_LOC_STRINGS" = "YES";
+				"LD_RUNPATH_SEARCH_PATHS" = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/Frameworks",
+				);
+				"SDKROOT" = "iphoneos";
+				"SUPPORTED_PLATFORMS" = "iphoneos iphonesimulator";
+				"PRODUCT_BUNDLE_IDENTIFIER" = "com.anna.tvglow.ios";
+				"TARGETED_DEVICE_FAMILY" = "1,2";
+				"SUPPORTS_MACCATALYST" = "NO";
+				"SWIFT_OPTIMIZATION_LEVEL" = "-Onone";
+				"DEBUG_INFORMATION_FORMAT" = "dwarf";
+				"SWIFT_ACTIVE_COMPILATION_CONDITIONS" = "DEBUG";
+			};
+		};
+		"838083A71760808BBB377357" = {
+			"isa" = "XCBuildConfiguration";
+			"name" = "Release";
+			"buildSettings" = {
+				"SWIFT_VERSION" = "5.0";
+				"MACOSX_DEPLOYMENT_TARGET" = "14.0";
+				"IPHONEOS_DEPLOYMENT_TARGET" = "17.0";
+				"CLANG_ENABLE_MODULES" = "YES";
+				"CLANG_ENABLE_OBJC_ARC" = "YES";
+				"ENABLE_TESTABILITY" = "YES";
+				"GENERATE_INFOPLIST_FILE" = "NO";
+				"INFOPLIST_FILE" = "TVGlow/Config/Info.plist";
+				"CURRENT_PROJECT_VERSION" = "1";
+				"MARKETING_VERSION" = "1.0";
+				"PRODUCT_NAME" = "TV Glow";
+				"PRODUCT_MODULE_NAME" = "TVGlow";
+				"ASSETCATALOG_COMPILER_APPICON_NAME" = "AppIcon";
+				"CODE_SIGN_STYLE" = "Automatic";
+				"SWIFT_EMIT_LOC_STRINGS" = "YES";
+				"LD_RUNPATH_SEARCH_PATHS" = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/Frameworks",
+				);
+				"SDKROOT" = "iphoneos";
+				"SUPPORTED_PLATFORMS" = "iphoneos iphonesimulator";
+				"PRODUCT_BUNDLE_IDENTIFIER" = "com.anna.tvglow.ios";
+				"TARGETED_DEVICE_FAMILY" = "1,2";
+				"SUPPORTS_MACCATALYST" = "NO";
+				"SWIFT_OPTIMIZATION_LEVEL" = "-O";
+				"DEBUG_INFORMATION_FORMAT" = "dwarf-with-dsym";
+			};
+		};
+		"E59C2E536DC4C22D0C02D4B8" = {
+			"isa" = "XCConfigurationList";
+			"buildConfigurations" = (
+				"452F5A2F7299CED80EEAB184",
+				"838083A71760808BBB377357",
+			);
+			"defaultConfigurationIsVisible" = 0;
+			"defaultConfigurationName" = "Release";
+		};
+		"3E762B1378C1284ADEBE95C0" = {
+			"isa" = "PBXNativeTarget";
+			"name" = "TV Glow iOS";
+			"productName" = "TV Glow";
+			"productReference" = "679D800FB0F7C78048DDEF4D";
+			"productType" = "com.apple.product-type.application";
+			"buildConfigurationList" = "E59C2E536DC4C22D0C02D4B8";
+			"buildPhases" = (
+				"9C28F5FF27EF4CDBE4A4B070",
+				"07062973FBC66B46BDB40765",
+				"088AE5F8F41D5C28D4275F2E",
+			);
+			"buildRules" = (
+			);
+			"dependencies" = (
+			);
+		};
+		"FDF98803FFAAFF1147692F15" = {
+			"isa" = "PBXFileReference";
+			"explicitFileType" = "wrapper.cfbundle";
+			"includeInIndex" = 0;
+			"path" = "TVGlowTests.xctest";
+			"sourceTree" = "BUILT_PRODUCTS_DIR";
+		};
+		"1822113CA1BAD870E3628585" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "059AA59543761B5D3554A4F6";
+		};
+		"F9A6810DFAEB91B8F7726AC5" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "447EB0FBA7D179F77596763F";
+		};
+		"84BDEFA8507C0F0C50962105" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "82C68ACC7717A5C0781D7C34";
+		};
+		"2D63F02CC4C51472954A320F" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "2D262640D97CD5113319883E";
+		};
+		"867443589A017F3CCAA1E96A" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "EDACEB87025C7D7B255174AC";
+		};
+		"07EE4FFA8DB9E5A964133969" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "E05FCB614AB36FDEE72EE1F2";
+		};
+		"2251F79CE8CE79DDA18CF73E" = {
+			"isa" = "PBXSourcesBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = (
+				"1822113CA1BAD870E3628585",
+				"F9A6810DFAEB91B8F7726AC5",
+				"84BDEFA8507C0F0C50962105",
+				"2D63F02CC4C51472954A320F",
+				"867443589A017F3CCAA1E96A",
+				"07EE4FFA8DB9E5A964133969",
+			);
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"7353FD632881D126FD0E6599" = {
+			"isa" = "PBXResourcesBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = (
+			);
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"EC43C2A32185190DF9C7A2A7" = {
+			"isa" = "PBXFrameworksBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = (
+			);
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"34BE6D4215B8B1C254345416" = {
+			"isa" = "XCBuildConfiguration";
+			"name" = "Debug";
+			"buildSettings" = {
+				"SWIFT_VERSION" = "5.0";
+				"MACOSX_DEPLOYMENT_TARGET" = "14.0";
+				"IPHONEOS_DEPLOYMENT_TARGET" = "17.0";
+				"CLANG_ENABLE_MODULES" = "YES";
+				"CLANG_ENABLE_OBJC_ARC" = "YES";
+				"ENABLE_TESTABILITY" = "YES";
+				"GENERATE_INFOPLIST_FILE" = "YES";
+				"CURRENT_PROJECT_VERSION" = "1";
+				"MARKETING_VERSION" = "1.0";
+				"PRODUCT_NAME" = "TVGlowTests";
+				"PRODUCT_MODULE_NAME" = "TVGlowTests";
+				"CODE_SIGN_STYLE" = "Automatic";
+				"SWIFT_EMIT_LOC_STRINGS" = "YES";
+				"LD_RUNPATH_SEARCH_PATHS" = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/Frameworks",
+				);
+				"SDKROOT" = "macosx";
+				"SUPPORTED_PLATFORMS" = "macosx";
+				"PRODUCT_BUNDLE_IDENTIFIER" = "com.anna.tvglow.tests";
+				"CODE_SIGN_IDENTITY" = "-";
+				"CODE_SIGN_ENTITLEMENTS" = "";
+				"ENABLE_HARDENED_RUNTIME" = "YES";
+				"SWIFT_OPTIMIZATION_LEVEL" = "-Onone";
+				"DEBUG_INFORMATION_FORMAT" = "dwarf";
+				"SWIFT_ACTIVE_COMPILATION_CONDITIONS" = "DEBUG";
+			};
+		};
+		"FADCA9E4220DCCB4910052B3" = {
+			"isa" = "XCBuildConfiguration";
+			"name" = "Release";
+			"buildSettings" = {
+				"SWIFT_VERSION" = "5.0";
+				"MACOSX_DEPLOYMENT_TARGET" = "14.0";
+				"IPHONEOS_DEPLOYMENT_TARGET" = "17.0";
+				"CLANG_ENABLE_MODULES" = "YES";
+				"CLANG_ENABLE_OBJC_ARC" = "YES";
+				"ENABLE_TESTABILITY" = "YES";
+				"GENERATE_INFOPLIST_FILE" = "YES";
+				"CURRENT_PROJECT_VERSION" = "1";
+				"MARKETING_VERSION" = "1.0";
+				"PRODUCT_NAME" = "TVGlowTests";
+				"PRODUCT_MODULE_NAME" = "TVGlowTests";
+				"CODE_SIGN_STYLE" = "Automatic";
+				"SWIFT_EMIT_LOC_STRINGS" = "YES";
+				"LD_RUNPATH_SEARCH_PATHS" = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/Frameworks",
+				);
+				"SDKROOT" = "macosx";
+				"SUPPORTED_PLATFORMS" = "macosx";
+				"PRODUCT_BUNDLE_IDENTIFIER" = "com.anna.tvglow.tests";
+				"CODE_SIGN_IDENTITY" = "-";
+				"CODE_SIGN_ENTITLEMENTS" = "";
+				"ENABLE_HARDENED_RUNTIME" = "YES";
+				"SWIFT_OPTIMIZATION_LEVEL" = "-O";
+				"DEBUG_INFORMATION_FORMAT" = "dwarf-with-dsym";
+			};
+		};
+		"6CA5BF8403D548C411DAAF4A" = {
+			"isa" = "XCConfigurationList";
+			"buildConfigurations" = (
+				"34BE6D4215B8B1C254345416",
+				"FADCA9E4220DCCB4910052B3",
+			);
+			"defaultConfigurationIsVisible" = 0;
+			"defaultConfigurationName" = "Release";
+		};
+		"DB232FBED708F45A1A18553B" = {
+			"isa" = "PBXNativeTarget";
+			"name" = "TVGlowTests";
+			"productName" = "TVGlowTests";
+			"productReference" = "FDF98803FFAAFF1147692F15";
+			"productType" = "com.apple.product-type.bundle.unit-test";
+			"buildConfigurationList" = "6CA5BF8403D548C411DAAF4A";
+			"buildPhases" = (
+				"2251F79CE8CE79DDA18CF73E",
+				"EC43C2A32185190DF9C7A2A7",
+				"7353FD632881D126FD0E6599",
+			);
+			"buildRules" = (
+			);
+			"dependencies" = (
+			);
+		};
+		"1EE63A94BAD0DF0FCB0E7B8C" = {
+			"isa" = "PBXGroup";
+			"name" = "Products";
+			"sourceTree" = "<group>";
+			"children" = (
+				"EE44EC02CC9792D5EDBBA009",
+				"679D800FB0F7C78048DDEF4D",
+				"FDF98803FFAAFF1147692F15",
+			);
+		};
+		"B28B7AF69320201D1CF206EB" = {
+			"isa" = "PBXGroup";
+			"sourceTree" = "<group>";
+			"children" = (
+				"3A2A88DEEFF3D1D23E496597",
+				"8B7A6DECC0651D269EA794C7",
+				"1EE63A94BAD0DF0FCB0E7B8C",
+			);
+		};
+		"89E1FD6268CC0F221A2BE178" = {
+			"isa" = "XCBuildConfiguration";
+			"name" = "Debug";
+			"buildSettings" = {
+				"ALWAYS_SEARCH_USER_PATHS" = "NO";
+				"CLANG_WARN_DOCUMENTATION_COMMENTS" = "YES";
+				"GCC_C_LANGUAGE_STANDARD" = "gnu17";
+				"SWIFT_VERSION" = "5.0";
+				"SWIFT_OPTIMIZATION_LEVEL" = "-Onone";
+				"DEBUG_INFORMATION_FORMAT" = "dwarf";
+				"SWIFT_ACTIVE_COMPILATION_CONDITIONS" = "DEBUG";
+			};
+		};
+		"E6DE6C99132752C914FEF632" = {
+			"isa" = "XCBuildConfiguration";
+			"name" = "Release";
+			"buildSettings" = {
+				"ALWAYS_SEARCH_USER_PATHS" = "NO";
+				"CLANG_WARN_DOCUMENTATION_COMMENTS" = "YES";
+				"GCC_C_LANGUAGE_STANDARD" = "gnu17";
+				"SWIFT_VERSION" = "5.0";
+				"SWIFT_OPTIMIZATION_LEVEL" = "-O";
+				"DEBUG_INFORMATION_FORMAT" = "dwarf-with-dsym";
+			};
+		};
+		"862894B703A6DEDF96A9DD6C" = {
+			"isa" = "XCConfigurationList";
+			"buildConfigurations" = (
+				"89E1FD6268CC0F221A2BE178",
+				"E6DE6C99132752C914FEF632",
+			);
+			"defaultConfigurationIsVisible" = 0;
+			"defaultConfigurationName" = "Release";
+		};
+		"98F54143AB4E86B28C3AFEE0" = {
+			"isa" = "PBXProject";
+			"attributes" = {
+				"BuildIndependentTargetsInParallel" = "YES";
+				"LastUpgradeCheck" = "2630";
+			};
+			"buildConfigurationList" = "862894B703A6DEDF96A9DD6C";
+			"compatibilityVersion" = "Xcode 14.0";
+			"developmentRegion" = "en";
+			"hasScannedForEncodings" = 0;
+			"knownRegions" = (
+				"en",
+				"Base",
+			);
+			"mainGroup" = "B28B7AF69320201D1CF206EB";
+			"productRefGroup" = "1EE63A94BAD0DF0FCB0E7B8C";
+			"projectDirPath" = "";
+			"projectRoot" = "";
+			"targets" = (
+				"05380E88487458D548BA9E0A",
+				"3E762B1378C1284ADEBE95C0",
+				"DB232FBED708F45A1A18553B",
+			);
+		};
+	};
+	"rootObject" = "98F54143AB4E86B28C3AFEE0";
+}

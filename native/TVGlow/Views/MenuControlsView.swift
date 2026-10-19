@@ -3,6 +3,7 @@ import SwiftUI
 #if os(macOS)
 struct MenuControlsView: View {
     @ObservedObject var store: ControlStore
+    @ObservedObject var remote: AppleRemoteStore
     @Environment(\.openWindow) private var openWindow
 
     var body: some View {
@@ -35,6 +36,18 @@ struct MenuControlsView: View {
                     if !editing { Task { await store.setVolume(Int(store.volumeDraft)) } }
                 }.disabled(!store.sonosConnected || store.applyingVolume).accessibilityLabel("Sonos volume")
             }
+            Divider()
+            HStack {
+                Label("Apple TV", systemImage: "appletv").foregroundStyle(GlowTheme.muted)
+                Spacer()
+                if remote.connected {
+                    Button { remote.press(.back) } label: { Image(systemName: "chevron.backward") }.help("Apple TV Back")
+                    Button { remote.press(.playPause) } label: { Image(systemName: "playpause.fill") }.help("Apple TV Play / Pause")
+                    Button { remote.press(.home) } label: { Image(systemName: "house") }.help("Apple TV Home")
+                } else {
+                    Button("Open remote") { openWindow(id: "main"); NSApp.activate(ignoringOtherApps: true) }
+                }
+            }.buttonStyle(.plain)
             HStack {
                 Text("Living room").foregroundStyle(GlowTheme.muted)
                 Spacer()

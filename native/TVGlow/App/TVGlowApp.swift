@@ -4,13 +4,14 @@ import SwiftUI
 @MainActor
 struct TVGlowApp: App {
     @StateObject private var store = ControlStore()
+    @StateObject private var remote = AppleRemoteStore()
 
     var body: some Scene {
         #if os(macOS)
         Window("TV Glow", id: "main") {
-            ContentView(store: store).frame(minWidth: 740, idealWidth: 790, maxWidth: 920, minHeight: 610, idealHeight: 730)
+            ContentView(store: store, remote: remote).frame(minWidth: 1020, idealWidth: 1100, maxWidth: 1240, minHeight: 610, idealHeight: 730)
         }
-        .defaultSize(width: 790, height: 730)
+        .defaultSize(width: 1100, height: 730)
         .windowStyle(.hiddenTitleBar)
         .commands {
             CommandGroup(after: .newItem) {
@@ -19,14 +20,14 @@ struct TVGlowApp: App {
             }
         }
         MenuBarExtra {
-            MenuControlsView(store: store)
+            MenuControlsView(store: store, remote: remote)
         } label: {
             Image(systemName: "sun.max")
         }
         .menuBarExtraStyle(.window)
         #else
         WindowGroup {
-            ContentView(store: store)
+            ContentView(store: store, remote: remote)
         }
         #endif
     }

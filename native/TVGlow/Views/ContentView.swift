@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ContentView: View {
     @ObservedObject var store: ControlStore
+    @ObservedObject var remote: AppleRemoteStore
     @State private var showingConnections = false
 
     var body: some View {
@@ -29,7 +30,7 @@ struct ContentView: View {
 
     private var maximumWidth: CGFloat {
         #if os(macOS)
-        850
+        1200
         #else
         500
         #endif
@@ -39,10 +40,12 @@ struct ContentView: View {
         #if os(macOS)
         HStack(alignment: .top, spacing: 18) {
             BrightnessCard(store: store, showConnections: { showingConnections = true }).frame(maxWidth: .infinity)
+            AppleRemoteCard(remote: remote).frame(maxWidth: .infinity)
             VolumeCard(store: store, showConnections: { showingConnections = true }).frame(maxWidth: .infinity)
         }
         #else
         BrightnessCard(store: store, showConnections: { showingConnections = true })
+        AppleRemoteCard(remote: remote)
         VolumeCard(store: store, showConnections: { showingConnections = true })
         #endif
     }

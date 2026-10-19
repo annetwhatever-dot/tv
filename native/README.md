@@ -1,6 +1,6 @@
 # TV Glow — native Apple apps
 
-The macOS SwiftUI app controls Anna’s LG C1 OLED brightness and Sonos Arc Ultra volume directly over the home network. It has a main window, a menu-bar panel, brightness presets, precise +/- controls, volume and mute. The native apps do not use the Python/web server.
+The macOS SwiftUI app controls Anna’s LG C1 OLED brightness and Sonos Arc Ultra volume directly over the home network. It has a main window, a menu-bar panel, brightness presets, precise +/- controls, volume/mute, and a standalone Apple TV remote. The native apps do not use the Python/web server.
 
 The installed Mac app is `/Users/anna/Applications/TV Glow.app`. Open it from Finder, Spotlight or Launchpad. Click the sun in the menu bar for quick controls. **Connections** lets you update each device’s IP address or forget this app’s TV pairing.
 
@@ -17,7 +17,7 @@ The addresses are editable and saved after a successful connection. macOS may as
 
 ## Build and test macOS
 
-No package dependencies or simulator runtime are required. Xcode 26.3 is available on this Mac. The source targets macOS 14+ and iOS 17+.
+No simulator runtime is required. The native Apple TV protocol package is vendored under `Vendor/ItsytvCore`; Xcode resolves its pinned SwiftProtobuf and SRP dependencies. The lockfile is committed. Xcode 26.3 is available on this Mac. The source targets macOS 14+ and iOS 17+.
 
 ```sh
 cd /Users/anna/Developer/tv-brightness/native
@@ -34,6 +34,12 @@ The release `.app` is under `DerivedData/Build/Products/Release/`. Quit the inst
 
 Tests use fake devices and never change real brightness, volume or mute. They cover connecting without writes, 0% brightness, readback failures, independent Sonos control, XML parsing, invalid values and local address validation.
 
+## Apple TV remote
+
+The middle card discovers Apple TVs through Bonjour. Choose a device, click **Connect**, and enter the four-digit code displayed on the TV. Pairing credentials are stored in this app’s own Keychain namespace, separately for Debug and Release. Opening the app discovers devices without automatically connecting or sending remote commands.
+
+The remote includes a direction pad, Select, Back, Home and Play/Pause. Click the pad to use arrow keys, Return, Space and Escape. Text entry is available when a search/text field is focused on Apple TV. Menu-bar controls include Back, Play/Pause and Home after connecting. This is our own native remote using community Companion/MRP protocol implementations, rather than an embedded system iPhone Remote. Siri voice and Apple’s Control Center interface are not included. The Dev app has paired successfully with Anna’s Apple TV named `tv`. Playback/navigation/text behavior needs user-visible verification; unit tests use fakes.
+
 ## iOS groundwork
 
 `TV Glow iOS` uses the same SwiftUI views and device clients, with a vertical phone layout. The menu-bar scene is macOS-only. An iPhone build can be compiled without starting a simulator:
@@ -48,12 +54,13 @@ The iOS target is groundwork, not yet delivered. This Mac currently reports that
 
 ## Verified on Anna’s devices
 
-The native release connected to both devices. A brightness command of 0% was accepted and read back as 0%. Sonos volume was lowered from 45 to 44 through the native app, then restored to 45 and read back. Live tests never increased TV brightness. Six macOS unit tests passed. Brightness fallback handles the C1’s 500/unsupported-key response to direct writes.
+The native release connected to both devices. A brightness command of 0% was accepted and read back as 0%. Sonos volume was lowered from 45 to 44 through the native app, then restored to 45 and read back. Live tests never increased TV brightness. Fourteen macOS unit tests passed, including remote discovery without automatic commands, PIN validation, offline command guards, timeouts and isolated Keychain namespaces. Brightness fallback handles the C1’s 500/unsupported-key response to direct writes.
 
 ## Protocols and attribution
 
 - LG webOS SSAP WebSocket on the TV’s local port 3000. A rejected direct picture write uses the established local notification callback method to apply only the ordinary `backlight` picture setting. No calibration or service-menu features are exposed.
 - Sonos local UPnP `RenderingControl` on port 1400: `GetVolume`, `SetVolume`, `GetMute`, `SetMute`. This targets the Living Room soundbar. It does not change whole-house Sonos group volume.
+- Apple TV Companion/MRP uses [ItsytvCore](https://github.com/nickustinov/itsytv-core), pinned to the revision documented in `Vendor/ItsytvCore/TVGLOW-PROVENANCE.md`. Licenses and the small host-identity/Keychain/disconnect patches are retained there.
 - `WebOSManifest.json` and the compatible LG fallback follow [bscpylgtv](https://github.com/chros73/bscpylgtv); its MIT notice is retained in `TVGlow/Resources/WebOS-LICENSE.txt` and in the app bundle. No private pairing keys are embedded in source or resources.
 
 `scripts/generate_project.py` reproducibly generates the Xcode project and icon catalogs. Regeneration needs Pillow, already present in the Mac’s Python environment. Normal Xcode builds do not run that generator.

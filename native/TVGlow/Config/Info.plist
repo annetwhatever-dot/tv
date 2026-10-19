@@ -27,10 +27,16 @@
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
 	</dict>
+	<key>NSBonjourServices</key>
+	<array>
+		<string>_companion-link._tcp</string>
+		<string>_airplay._tcp</string>
+		<string>_mediaremotetv._tcp</string>
+	</array>
 	<key>NSHighResolutionCapable</key>
 	<true/>
 	<key>NSLocalNetworkUsageDescription</key>
-	<string>TV Glow connects directly to your LG TV and Sonos soundbar to adjust brightness and volume.</string>
+	<string>TV Glow connects to your LG TV, Apple TV and Sonos soundbar for remote control, brightness and volume.</string>
 	<key>UILaunchScreen</key>
 	<dict/>
 	<key>UISupportedInterfaceOrientations</key>

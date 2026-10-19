@@ -1,0 +1,119 @@
+import XCTest
+import ItsytvCore
+
+@MainActor
+final class MockAppleRemoteDriver: AppleRemoteDriving {
+    var snapshot = AppleRemoteSnapshot(devices: [.init(id: "tv", name: "tv", model: "AppleTV14,1")])
+    var scans = 0
+    var connections: [String] = []
+    var disconnections = 0
+    var pins: [String] = []
+    var commands: [AppleRemoteCommand] = []
+    var texts: [String] = []
+    func startDiscovery() { scans += 1 }
+    func stopDiscovery() {}
+    func connect(deviceID: String) { connections.append(deviceID); snapshot.phase = .connecting }
+    func disconnect() { disconnections += 1; snapshot.phase = .disconnected; snapshot.canSubmitPIN = false }
+    func submitPIN(_ pin: String) { pins.append(pin) }
+    func press(_ command: AppleRemoteCommand) { commands.append(command) }
+    func sendText(_ text: String) { texts.append(text) }
+}
+
+@MainActor
+final class AppleRemoteTests: XCTestCase {
+    private func store(_ driver: MockAppleRemoteDriver) -> AppleRemoteStore {
+        AppleRemoteStore(driver: driver, defaults: UserDefaults(suiteName: UUID().uuidString)!)
+    }
+
+    func testOpeningOnlyDiscoversWithoutConnectingOrSendingCommands() async {
+        let driver = MockAppleRemoteDriver()
+        let underTest = store(driver)
+        defer { underTest.stop() }
+        underTest.start()
+        underTest.start()
+        XCTAssertEqual(driver.scans, 1)
+        XCTAssertEqual(underTest.selectedDeviceID, "tv")
+        XCTAssertTrue(driver.connections.isEmpty)
+        XCTAssertTrue(driver.commands.isEmpty)
+        XCTAssertTrue(driver.pins.isEmpty)
+    }
+
+    func testOfflineButtonsAreIgnoredInsteadOfQueued() async {
+        let driver = MockAppleRemoteDriver()
+        let underTest = store(driver)
+        defer { underTest.stop() }
+        underTest.synchronize()
+        underTest.press(.home)
+        underTest.connect()
+        underTest.press(.playPause)
+        XCTAssertEqual(driver.connections, ["tv"])
+        XCTAssertTrue(driver.commands.isEmpty)
+        driver.snapshot.phase = .connected
+        underTest.synchronize()
+        underTest.press(.left)
+        XCTAssertEqual(driver.commands, [.left])
+    }
+
+    func testPINRequiresFourASCIIDigits() async {
+        XCTAssertEqual(AppleRemoteStore.validPIN(" 1234 "), "1234")
+        for invalid in ["", "123", "12345", "12a4", "１２３４", "1 234"] {
+            XCTAssertNil(AppleRemoteStore.validPIN(invalid))
+        }
+    }
+
+    func testPINWaitsForChallengeAndCannotBeSubmittedTwice() async {
+        let driver = MockAppleRemoteDriver()
+        let remote = store(driver)
+        defer { remote.stop() }
+        driver.snapshot.phase = .pairing
+        remote.synchronize()
+        remote.pin = "1234"
+        remote.submitPIN()
+        XCTAssertTrue(driver.pins.isEmpty)
+        driver.snapshot.canSubmitPIN = true
+        remote.synchronize()
+        remote.submitPIN()
+        remote.submitPIN()
+        XCTAssertEqual(driver.pins, ["1234"])
+        driver.snapshot.phase = .connected
+        remote.synchronize()
+        XCTAssertEqual(remote.pin, "")
+    }
+
+    func testKeyboardOnlySendsToFocusedTVTextField() async {
+        let driver = MockAppleRemoteDriver()
+        let underTest = store(driver)
+        defer { underTest.stop() }
+        driver.snapshot.phase = .connected
+        underTest.synchronize()
+        underTest.text = "Movie title"
+        underTest.sendText()
+        XCTAssertTrue(driver.texts.isEmpty)
+        driver.snapshot.keyboardFocused = true
+        underTest.synchronize()
+        underTest.sendText()
+        XCTAssertEqual(driver.texts, ["Movie title"])
+        XCTAssertEqual(underTest.text, "")
+    }
+
+    func testConnectionTimeoutStopsPendingSession() async {
+        let driver = MockAppleRemoteDriver()
+        let underTest = store(driver)
+        defer { underTest.stop() }
+        underTest.synchronize()
+        underTest.connect()
+        underTest.synchronize(now: Date().addingTimeInterval(26))
+        XCTAssertEqual(driver.disconnections, 1)
+        XCTAssertEqual(underTest.snapshot.phase, .disconnected)
+        XCTAssertTrue(underTest.hasError)
+        XCTAssertTrue(driver.commands.isEmpty)
+    }
+
+    func testAppleTVKeychainServiceIsAlsoIsolatedFromUpstreamAndProduction() async {
+        let release = KeychainStorage.serviceIdentifier(for: "com.anna.tvglow.mac")
+        let debug = KeychainStorage.serviceIdentifier(for: "com.anna.tvglow.mac.debug")
+        XCTAssertNotEqual(release, debug)
+        XCTAssertEqual(debug, "com.anna.tvglow.mac.debug.appletv.credentials")
+        XCTAssertNotEqual(release, "com.itsytv.credentials")
+    }
+}

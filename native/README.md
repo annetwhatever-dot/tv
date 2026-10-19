@@ -4,6 +4,10 @@ The macOS SwiftUI app controls Anna’s LG C1 OLED brightness and Sonos Arc Ultr
 
 The installed Mac app is `/Users/anna/Applications/TV Glow.app`. Open it from Finder, Spotlight or Launchpad. Click the sun in the menu bar for quick controls. **Connections** lets you update each device’s IP address or forget this app’s TV pairing.
 
+Debug builds use the display name **TV Glow Dev** and bundle ID `com.anna.tvglow.mac.debug`; Release uses **TV Glow** and `com.anna.tvglow.mac`. Their sandbox preferences and Keychain services are separate. The iOS Debug bundle ID likewise ends in `.debug`. Install Debug builds as `TV Glow Dev.app`, never over the Release app. Pair each build independently. The earlier shared `com.anna.tvglow.pairing` entry is no longer queried or migrated, so it can be denied without entering a password.
+
+Ad hoc signatures change when app code changes. Separate IDs prevent development builds from touching production pairings; a stable Apple development/distribution signing identity is the longer-term solution for Keychain trust across signed app updates.
+
 Known devices:
 
 - LG OLED65C1RLA: `192.168.2.159`

@@ -8,7 +8,12 @@ protocol PairingStoring {
 }
 
 struct PairingStore: PairingStoring {
-    private let service = "com.anna.tvglow.pairing"
+    let service: String
+
+    init(bundleIdentifier: String = Bundle.main.bundleIdentifier ?? "com.anna.tvglow.unknown") {
+        // Debug and release apps must never query each other's pairing entries.
+        service = bundleIdentifier + ".pairing"
+    }
 
     private func query(_ host: String) -> [String: Any] {
         [kSecClass as String: kSecClassGenericPassword,

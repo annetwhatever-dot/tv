@@ -34,6 +34,15 @@ final class MemoryPairing: PairingStoring {
 }
 
 final class ControlTests: XCTestCase {
+    func testDebugAndReleaseKeychainNamespacesAreIsolated() {
+        let release = PairingStore(bundleIdentifier: "com.anna.tvglow.mac")
+        let debug = PairingStore(bundleIdentifier: "com.anna.tvglow.mac.debug")
+        XCTAssertEqual(release.service, "com.anna.tvglow.mac.pairing")
+        XCTAssertEqual(debug.service, "com.anna.tvglow.mac.debug.pairing")
+        XCTAssertNotEqual(release.service, debug.service)
+        XCTAssertNotEqual(debug.service, "com.anna.tvglow.pairing")
+    }
+
     func testOnlyPrivateAddressesAreAccepted() throws {
         XCTAssertEqual(try LocalAddress.validated("192.168.2.159"), "192.168.2.159")
         XCTAssertEqual(try LocalAddress.validated(" 10.0.0.7 "), "10.0.0.7")

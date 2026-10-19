@@ -12,7 +12,12 @@ def config_list(name,settings):
  configs=[]
  for mode in ['Debug','Release']:
   specific={**settings,'SWIFT_OPTIMIZATION_LEVEL':'-Onone' if mode=='Debug' else '-O','DEBUG_INFORMATION_FORMAT':'dwarf' if mode=='Debug' else 'dwarf-with-dsym'}
-  if mode=='Debug':specific['SWIFT_ACTIVE_COMPILATION_CONDITIONS']='DEBUG'
+  if mode=='Debug':
+   specific['SWIFT_ACTIVE_COMPILATION_CONDITIONS']='DEBUG'
+   if name in ['macOS','iOS']:
+    specific['PRODUCT_BUNDLE_IDENTIFIER']=settings['PRODUCT_BUNDLE_IDENTIFIER']+'.debug'
+    specific['APP_DISPLAY_NAME']='TV Glow Dev'
+  if mode=='Release' and name=='macOS':specific['CODE_SIGN_INJECT_BASE_ENTITLEMENTS']='NO'
   configs.append(add(name+mode,'XCBuildConfiguration',name=mode,buildSettings=specific))
  return add(name+'configs','XCConfigurationList',buildConfigurations=configs,defaultConfigurationIsVisible=0,defaultConfigurationName='Release')
 swifts=sorted((ROOT/'TVGlow').rglob('*.swift'))
@@ -25,7 +30,7 @@ appgroup=add('appgroup','PBXGroup',path='TVGlow',sourceTree='<group>',children=l
 testfile=add('testfile','PBXFileReference',lastKnownFileType='sourcecode.swift',path='ControlTests.swift',sourceTree='<group>')
 testgroup=add('testgroup','PBXGroup',path='TVGlowTests',sourceTree='<group>',children=[testfile])
 products=[];targets=[]
-base={'SWIFT_VERSION':'5.0','MACOSX_DEPLOYMENT_TARGET':'14.0','IPHONEOS_DEPLOYMENT_TARGET':'17.0','CLANG_ENABLE_MODULES':'YES','CLANG_ENABLE_OBJC_ARC':'YES','ENABLE_TESTABILITY':'YES','GENERATE_INFOPLIST_FILE':'NO','INFOPLIST_FILE':'TVGlow/Config/Info.plist','CURRENT_PROJECT_VERSION':'1','MARKETING_VERSION':'1.0','PRODUCT_NAME':'TV Glow','PRODUCT_MODULE_NAME':'TVGlow','ASSETCATALOG_COMPILER_APPICON_NAME':'AppIcon','CODE_SIGN_STYLE':'Automatic','SWIFT_EMIT_LOC_STRINGS':'YES','LD_RUNPATH_SEARCH_PATHS':['$(inherited)','@executable_path/../Frameworks','@executable_path/Frameworks']}
+base={'SWIFT_VERSION':'5.0','MACOSX_DEPLOYMENT_TARGET':'14.0','IPHONEOS_DEPLOYMENT_TARGET':'17.0','CLANG_ENABLE_MODULES':'YES','CLANG_ENABLE_OBJC_ARC':'YES','ENABLE_TESTABILITY':'YES','GENERATE_INFOPLIST_FILE':'NO','INFOPLIST_FILE':'TVGlow/Config/Info.plist','CURRENT_PROJECT_VERSION':'1','MARKETING_VERSION':'1.0','PRODUCT_NAME':'TV Glow','APP_DISPLAY_NAME':'TV Glow','PRODUCT_MODULE_NAME':'TVGlow','ASSETCATALOG_COMPILER_APPICON_NAME':'AppIcon','CODE_SIGN_STYLE':'Automatic','SWIFT_EMIT_LOC_STRINGS':'YES','LD_RUNPATH_SEARCH_PATHS':['$(inherited)','@executable_path/../Frameworks','@executable_path/Frameworks']}
 for platform in ['macOS','iOS','Tests']:
  is_test=platform=='Tests';is_mac=platform!='iOS';name='TVGlowTests' if is_test else 'TV Glow '+platform
  product=add(platform+'product','PBXFileReference',explicitFileType='wrapper.cfbundle' if is_test else 'wrapper.application',includeInIndex=0,path='TVGlowTests.xctest' if is_test else 'TV Glow.app',sourceTree='BUILT_PRODUCTS_DIR');products.append(product)
@@ -67,7 +72,7 @@ for platform,target in zip(['macOS','iOS'],targets):
 <AnalyzeAction buildConfiguration="Debug"/><ArchiveAction buildConfiguration="Release" revealArchiveInOrganizer="YES"/>
 </Scheme>'''
  (schemedir/(name+'.xcscheme')).write_text(xml)
-info={'CFBundleDevelopmentRegion':'en','CFBundleDisplayName':'TV Glow','CFBundleExecutable':'$(EXECUTABLE_NAME)','CFBundleIdentifier':'$(PRODUCT_BUNDLE_IDENTIFIER)','CFBundleInfoDictionaryVersion':'6.0','CFBundleName':'TV Glow','CFBundlePackageType':'APPL','CFBundleShortVersionString':'$(MARKETING_VERSION)','CFBundleVersion':'$(CURRENT_PROJECT_VERSION)','LSApplicationCategoryType':'public.app-category.utilities','NSLocalNetworkUsageDescription':'TV Glow connects directly to your LG TV and Sonos soundbar to adjust brightness and volume.','NSAppTransportSecurity':{'NSAllowsLocalNetworking':True},'NSHighResolutionCapable':True,'UILaunchScreen':{},'UISupportedInterfaceOrientations':['UIInterfaceOrientationPortrait','UIInterfaceOrientationLandscapeLeft','UIInterfaceOrientationLandscapeRight']}
+info={'CFBundleDevelopmentRegion':'en','CFBundleDisplayName':'$(APP_DISPLAY_NAME)','CFBundleExecutable':'$(EXECUTABLE_NAME)','CFBundleIdentifier':'$(PRODUCT_BUNDLE_IDENTIFIER)','CFBundleInfoDictionaryVersion':'6.0','CFBundleName':'$(APP_DISPLAY_NAME)','CFBundlePackageType':'APPL','CFBundleShortVersionString':'$(MARKETING_VERSION)','CFBundleVersion':'$(CURRENT_PROJECT_VERSION)','LSApplicationCategoryType':'public.app-category.utilities','NSLocalNetworkUsageDescription':'TV Glow connects directly to your LG TV and Sonos soundbar to adjust brightness and volume.','NSAppTransportSecurity':{'NSAllowsLocalNetworking':True},'NSHighResolutionCapable':True,'UILaunchScreen':{},'UISupportedInterfaceOrientations':['UIInterfaceOrientationPortrait','UIInterfaceOrientationLandscapeLeft','UIInterfaceOrientationLandscapeRight']}
 (ROOT/'TVGlow/Config/Info.plist').write_bytes(plistlib.dumps(info))
 (ROOT/'TVGlow/Config/Mac.entitlements').write_bytes(plistlib.dumps({'com.apple.security.app-sandbox':True,'com.apple.security.network.client':True}))
 # Shared simple vector-style sun mark, rasterized locally at each required size.

@@ -51,7 +51,8 @@ struct ContentView: View {
         HStack {
             Image(systemName: "sun.max.fill").font(.system(size: 24, weight: .light)).foregroundStyle(GlowTheme.lime)
             VStack(alignment: .leading, spacing: 2) {
-                Text("TV Glow").font(.system(size: 21, weight: .semibold, design: .rounded))
+                Text(Bundle.main.object(forInfoDictionaryKey: "CFBundleDisplayName") as? String ?? "TV Glow")
+                    .font(.system(size: 21, weight: .semibold, design: .rounded))
                 Text("A little light. A little atmosphere.").font(.system(size: 11)).foregroundStyle(GlowTheme.muted)
             }
             Spacer()

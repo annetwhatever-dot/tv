@@ -7,6 +7,7 @@
 - Opening, reconnecting and refreshing must only read device settings. Never apply a preset automatically.
 - During live tests in Anna’s dark room, keep TV brightness at or below its initial level. It was 0% during the first session. For volume tests, read the initial level, lower it gently, then restore that initial level. Never use a loud test level.
 - Keep pairing keys, `.state/`, `.venv/`, DerivedData, build products, personal Xcode settings and logs out of Git.
+- Test with the Debug bundle ID and install it separately as `TV Glow Dev.app`. Never replace the production app with a Debug build. Keep development and production Keychain services isolated by bundle ID.
 - Never use Sites, `chatgpt.site`, or `.openai/hosting.json`. Use local/LAN web previews unless Anna selects another provider.
 - For any web launch, restart, stop, preview or changed usable URL, follow `/Users/anna/.agents/skills/record-deployment-links/SKILL.md`: bind phone previews to `0.0.0.0`, verify the physical-network LAN URL, save one enabled/pinned Snippets entry with only that URL, run the PID-bound watcher, and verify it with `snippets-cli get`. Native app launches do not need web hosting.
 - Current web entry: Snippets keyword `app-tv-glow`. Preserve its last URL and mark it offline when the server stops.

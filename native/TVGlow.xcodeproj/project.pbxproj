@@ -117,6 +117,10 @@
 				"E05FCB614AB36FDEE72EE1F2",
 			);
 		};
+		"5538BD9B917FC22F2D66D938" = {
+			"isa" = "XCLocalSwiftPackageReference";
+			"relativePath" = "Vendor/ItsytvCore";
+		};
 		"EE44EC02CC9792D5EDBBA009" = {
 			"isa" = "PBXFileReference";
 			"explicitFileType" = "wrapper.application";
@@ -203,10 +207,20 @@
 			);
 			"runOnlyForDeploymentPostprocessing" = 0;
 		};
+		"9F5BB10A12820AED4C92095F" = {
+			"isa" = "XCSwiftPackageProductDependency";
+			"package" = "5538BD9B917FC22F2D66D938";
+			"productName" = "ItsytvCore";
+		};
+		"C871B594DC7B1680C502CD47" = {
+			"isa" = "PBXBuildFile";
+			"productRef" = "9F5BB10A12820AED4C92095F";
+		};
 		"9F43021F42602B42A6310C36" = {
 			"isa" = "PBXFrameworksBuildPhase";
 			"buildActionMask" = 2147483647;
 			"files" = (
+				"C871B594DC7B1680C502CD47",
 			);
 			"runOnlyForDeploymentPostprocessing" = 0;
 		};
@@ -307,6 +321,9 @@
 			);
 			"dependencies" = (
 			);
+			"packageProductDependencies" = (
+				"9F5BB10A12820AED4C92095F",
+			);
 		};
 		"679D800FB0F7C78048DDEF4D" = {
 			"isa" = "PBXFileReference";
@@ -394,10 +411,20 @@
 			);
 			"runOnlyForDeploymentPostprocessing" = 0;
 		};
+		"34753F34A491B3EC98E6D062" = {
+			"isa" = "XCSwiftPackageProductDependency";
+			"package" = "5538BD9B917FC22F2D66D938";
+			"productName" = "ItsytvCore";
+		};
+		"BD2D30F1D9DBA08726844477" = {
+			"isa" = "PBXBuildFile";
+			"productRef" = "34753F34A491B3EC98E6D062";
+		};
 		"07062973FBC66B46BDB40765" = {
 			"isa" = "PBXFrameworksBuildPhase";
 			"buildActionMask" = 2147483647;
 			"files" = (
+				"BD2D30F1D9DBA08726844477",
 			);
 			"runOnlyForDeploymentPostprocessing" = 0;
 		};
@@ -495,6 +522,9 @@
 			);
 			"dependencies" = (
 			);
+			"packageProductDependencies" = (
+				"34753F34A491B3EC98E6D062",
+			);
 		};
 		"FDF98803FFAAFF1147692F15" = {
 			"isa" = "PBXFileReference";
@@ -547,10 +577,20 @@
 			);
 			"runOnlyForDeploymentPostprocessing" = 0;
 		};
+		"A40A9FEF82F02481128B7667" = {
+			"isa" = "XCSwiftPackageProductDependency";
+			"package" = "5538BD9B917FC22F2D66D938";
+			"productName" = "ItsytvCore";
+		};
+		"8FF771624E57E94C0DBCAD96" = {
+			"isa" = "PBXBuildFile";
+			"productRef" = "A40A9FEF82F02481128B7667";
+		};
 		"EC43C2A32185190DF9C7A2A7" = {
 			"isa" = "PBXFrameworksBuildPhase";
 			"buildActionMask" = 2147483647;
 			"files" = (
+				"8FF771624E57E94C0DBCAD96",
 			);
 			"runOnlyForDeploymentPostprocessing" = 0;
 		};
@@ -646,6 +686,9 @@
 			);
 			"dependencies" = (
 			);
+			"packageProductDependencies" = (
+				"A40A9FEF82F02481128B7667",
+			);
 		};
 		"1EE63A94BAD0DF0FCB0E7B8C" = {
 			"isa" = "PBXGroup";
@@ -722,6 +765,9 @@
 				"05380E88487458D548BA9E0A",
 				"3E762B1378C1284ADEBE95C0",
 				"DB232FBED708F45A1A18553B",
+			);
+			"packageReferences" = (
+				"5538BD9B917FC22F2D66D938",
 			);
 		};
 	};

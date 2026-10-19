@@ -1,0 +1,18 @@
+# Vendored Apple TV protocol implementation
+
+Upstream: https://github.com/nickustinov/itsytv-core
+
+Pinned source revision: `5538245fc3baa030c7da90d919893b4bee64ca05`.
+
+Copyright 2026 Nick Ustinov. Upstream explicitly identifies this package as MIT-licensed in its README. The retained MIT notice is from the same author's parent macOS project, https://github.com/nickustinov/itsytv-macos/blob/main/LICENSE, which uses this package. The snapshot's README refers to a LICENSE path that was absent at this revision.
+
+Only runtime sources are vendored. Upstream tests and project instructions are omitted. App-level protocol integration tests use fake devices. SwiftProtobuf is pinned to 1.32.0, supporting the generated name-map API without the newer protoc/C++ toolchain submodules. SwiftSRP is pinned to the upstream lockfile's 2.2.0. Xcode's checked-in Package.resolved locks transitives.
+
+TV Glow changes:
+
+- The Apple TV credential service derives from the host app's bundle ID. Dev and Release therefore never use the upstream app's credentials or each other's credentials.
+- Pairing readiness is exposed so PIN entry waits for the TV challenge; disconnect clears a previous challenge.
+- Intentional disconnect clears callbacks, preventing a cancelled connection from starting an unwanted reconnect.
+- Client names and logging use the host TV Glow app identity.
+
+No private pairing credentials are included in this directory.

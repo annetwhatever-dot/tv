@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate the dependency-free Xcode project and app icon catalogs."""
+"""Generate the Xcode project, pinned local Apple TV package and app icons."""
 from pathlib import Path
 import hashlib,json,plistlib,math
 from PIL import Image,ImageDraw,ImageFilter
@@ -30,6 +30,7 @@ appgroup=add('appgroup','PBXGroup',path='TVGlow',sourceTree='<group>',children=l
 testfile=add('testfile','PBXFileReference',lastKnownFileType='sourcecode.swift',path='ControlTests.swift',sourceTree='<group>')
 testgroup=add('testgroup','PBXGroup',path='TVGlowTests',sourceTree='<group>',children=[testfile])
 products=[];targets=[]
+atv_package=add('atv-package','XCLocalSwiftPackageReference',relativePath='Vendor/ItsytvCore')
 base={'SWIFT_VERSION':'5.0','MACOSX_DEPLOYMENT_TARGET':'14.0','IPHONEOS_DEPLOYMENT_TARGET':'17.0','CLANG_ENABLE_MODULES':'YES','CLANG_ENABLE_OBJC_ARC':'YES','ENABLE_TESTABILITY':'YES','GENERATE_INFOPLIST_FILE':'NO','INFOPLIST_FILE':'TVGlow/Config/Info.plist','CURRENT_PROJECT_VERSION':'1','MARKETING_VERSION':'1.0','PRODUCT_NAME':'TV Glow','APP_DISPLAY_NAME':'TV Glow','PRODUCT_MODULE_NAME':'TVGlow','ASSETCATALOG_COMPILER_APPICON_NAME':'AppIcon','CODE_SIGN_STYLE':'Automatic','SWIFT_EMIT_LOC_STRINGS':'YES','LD_RUNPATH_SEARCH_PATHS':['$(inherited)','@executable_path/../Frameworks','@executable_path/Frameworks']}
 for platform in ['macOS','iOS','Tests']:
  is_test=platform=='Tests';is_mac=platform!='iOS';name='TVGlowTests' if is_test else 'TV Glow '+platform
@@ -39,18 +40,20 @@ for platform in ['macOS','iOS','Tests']:
  sourcephase=add(platform+'sources','PBXSourcesBuildPhase',buildActionMask=2147483647,files=builds,runOnlyForDeploymentPostprocessing=0)
  resbuilds=[] if is_test else [add(platform+'res'+ref,'PBXBuildFile',fileRef=ref) for ref in [assets]+resources]
  resourcephase=add(platform+'resources','PBXResourcesBuildPhase',buildActionMask=2147483647,files=resbuilds,runOnlyForDeploymentPostprocessing=0)
- frameworkphase=add(platform+'frameworks','PBXFrameworksBuildPhase',buildActionMask=2147483647,files=[],runOnlyForDeploymentPostprocessing=0)
+ atv_product=add(platform+'atv-product','XCSwiftPackageProductDependency',package=atv_package,productName='ItsytvCore')
+ atv_build=add(platform+'atv-build','PBXBuildFile',productRef=atv_product)
+ frameworkphase=add(platform+'frameworks','PBXFrameworksBuildPhase',buildActionMask=2147483647,files=[atv_build],runOnlyForDeploymentPostprocessing=0)
  settings={**base,'SDKROOT':'macosx' if is_mac else 'iphoneos','SUPPORTED_PLATFORMS':'macosx' if is_mac else 'iphoneos iphonesimulator','PRODUCT_BUNDLE_IDENTIFIER':'com.anna.tvglow.'+('tests' if is_test else 'mac' if is_mac else 'ios')}
  if is_mac:settings.update({'CODE_SIGN_IDENTITY':'-','CODE_SIGN_ENTITLEMENTS':'TVGlow/Config/Mac.entitlements','ENABLE_HARDENED_RUNTIME':'YES'})
  else:settings.update({'TARGETED_DEVICE_FAMILY':'1,2','SUPPORTS_MACCATALYST':'NO'})
  if is_test:
   settings.update({'PRODUCT_NAME':'TVGlowTests','PRODUCT_MODULE_NAME':'TVGlowTests','GENERATE_INFOPLIST_FILE':'YES','CODE_SIGN_ENTITLEMENTS':''})
   settings.pop('INFOPLIST_FILE');settings.pop('ASSETCATALOG_COMPILER_APPICON_NAME')
- target=add(platform+'target','PBXNativeTarget',name=name,productName=settings['PRODUCT_NAME'],productReference=product,productType='com.apple.product-type.bundle.unit-test' if is_test else 'com.apple.product-type.application',buildConfigurationList=config_list(platform,settings),buildPhases=[sourcephase,frameworkphase,resourcephase],buildRules=[],dependencies=[])
+ target=add(platform+'target','PBXNativeTarget',name=name,productName=settings['PRODUCT_NAME'],productReference=product,productType='com.apple.product-type.bundle.unit-test' if is_test else 'com.apple.product-type.application',buildConfigurationList=config_list(platform,settings),buildPhases=[sourcephase,frameworkphase,resourcephase],buildRules=[],dependencies=[],packageProductDependencies=[atv_product])
  targets.append(target)
 productgroup=add('productgroup','PBXGroup',name='Products',sourceTree='<group>',children=products)
 main=add('main','PBXGroup',sourceTree='<group>',children=[appgroup,testgroup,productgroup])
-project=add('project','PBXProject',attributes={'BuildIndependentTargetsInParallel':'YES','LastUpgradeCheck':'2630'},buildConfigurationList=config_list('project',{'ALWAYS_SEARCH_USER_PATHS':'NO','CLANG_WARN_DOCUMENTATION_COMMENTS':'YES','GCC_C_LANGUAGE_STANDARD':'gnu17','SWIFT_VERSION':'5.0'}),compatibilityVersion='Xcode 14.0',developmentRegion='en',hasScannedForEncodings=0,knownRegions=['en','Base'],mainGroup=main,productRefGroup=productgroup,projectDirPath='',projectRoot='',targets=targets)
+project=add('project','PBXProject',attributes={'BuildIndependentTargetsInParallel':'YES','LastUpgradeCheck':'2630'},buildConfigurationList=config_list('project',{'ALWAYS_SEARCH_USER_PATHS':'NO','CLANG_WARN_DOCUMENTATION_COMMENTS':'YES','GCC_C_LANGUAGE_STANDARD':'gnu17','SWIFT_VERSION':'5.0'}),compatibilityVersion='Xcode 14.0',developmentRegion='en',hasScannedForEncodings=0,knownRegions=['en','Base'],mainGroup=main,productRefGroup=productgroup,projectDirPath='',projectRoot='',targets=targets,packageReferences=[atv_package])
 def fmt(value,indent=0):
  if isinstance(value,dict):return '{\n'+''.join('\t'*(indent+1)+json.dumps(str(k))+' = '+fmt(v,indent+1)+';\n' for k,v in value.items())+'\t'*indent+'}'
  if isinstance(value,list):return '(\n'+''.join('\t'*(indent+1)+fmt(v,indent+1)+',\n' for v in value)+'\t'*indent+')'

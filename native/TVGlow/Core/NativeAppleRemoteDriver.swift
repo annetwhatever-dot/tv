@@ -42,6 +42,7 @@ final class NativeAppleRemoteDriver: AppleRemoteDriving {
         case .back: button = .menu
         case .home: button = .home
         case .playPause: button = .playPause
+        case .wake: button = .wake
         }
         manager.pressButton(button)
     }

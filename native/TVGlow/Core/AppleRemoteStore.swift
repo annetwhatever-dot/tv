@@ -23,7 +23,7 @@ struct AppleRemoteSnapshot: Equatable {
 }
 
 enum AppleRemoteCommand: String, CaseIterable {
-    case up, down, left, right, select, back, home, playPause
+    case up, down, left, right, select, back, home, playPause, wake
 }
 
 @MainActor

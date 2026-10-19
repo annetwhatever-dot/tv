@@ -5,6 +5,7 @@ protocol TVCommunicating: AnyObject {
     func connect(host: String, key: String?, awaitingApproval: @escaping () -> Void) async throws -> String
     func brightness() async throws -> Int
     func setBrightness(_ value: Int) async throws
+    func powerOff() async throws
     func disconnect()
 }
 
@@ -125,6 +126,10 @@ final class WebOSClient: TVCommunicating {
         session = nil
         approval = nil
         failAll(ControlError.disconnected)
+    }
+
+    func powerOff() async throws {
+        _ = try await request(uri: "system/turnOff", payload: [:])
     }
 
     func brightness() async throws -> Int {

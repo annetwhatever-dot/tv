@@ -17,15 +17,21 @@ struct ConnectionView: View {
             VStack(alignment: .leading, spacing: 9) {
                 Label("LG C1 television", systemImage: "tv").font(.system(size: 13, weight: .medium))
                 TextField("TV IP address", text: $store.tvAddress).textFieldStyle(.roundedBorder)
-                    .disabled(store.tvConnecting).accessibilityIdentifier("tvAddressField")
-                Text("Choose Accept on the TV when pairing for the first time. Pairing is saved in this device’s Keychain.")
+                    .disabled(store.tvConnecting || store.tvPowerBusy).accessibilityIdentifier("tvAddressField")
+                TextField("TV MAC address for wake", text: $store.tvMAC).textFieldStyle(.roundedBorder)
+                    .disabled(store.tvPowerBusy).accessibilityIdentifier("tvMACField")
+                Toggle("Also wake connected Apple TV (HDMI-CEC)", isOn: $store.wakeWithAppleTV)
+                    .font(.system(size: 11)).disabled(store.tvPowerBusy)
+                Text("Turn on uses the TV’s wired MAC address. Enable TV On with Mobile in LG settings. Apple TV wake requires HDMI-CEC / Simplink on the TV.")
+                    .font(.system(size: 10)).foregroundStyle(GlowTheme.muted).fixedSize(horizontal: false, vertical: true)
+                Text("Choose Accept on the TV when pairing for the first time. Pairing is saved securely on this device.")
                     .font(.system(size: 11)).foregroundStyle(GlowTheme.muted).fixedSize(horizontal: false, vertical: true)
                 HStack {
                     Button(store.tvConnecting ? "Connecting…" : "Connect TV") { Task { await store.connectTV() } }
-                        .disabled(store.tvConnecting || store.applyingBrightness)
+                        .disabled(store.tvConnecting || store.applyingBrightness || store.tvPowerBusy)
                     Spacer()
                     Button("Forget pairing") { store.forgetTV() }.buttonStyle(.plain).foregroundStyle(GlowTheme.muted)
-                        .disabled(store.tvConnecting || store.applyingBrightness)
+                        .disabled(store.tvConnecting || store.applyingBrightness || store.tvPowerBusy)
                 }
                 Text(store.tvMessage).font(.system(size: 11)).foregroundStyle(store.tvError ? .orange : GlowTheme.muted)
                     .fixedSize(horizontal: false, vertical: true)

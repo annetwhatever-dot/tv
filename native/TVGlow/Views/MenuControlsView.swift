@@ -19,9 +19,10 @@ struct MenuControlsView: View {
                 Slider(value: $store.brightnessDraft, in: 0...100, step: 1) { editing in
                     store.editingBrightness = editing
                     if !editing { Task { await store.setBrightness(Int(store.brightnessDraft)) } }
-                }.disabled(!store.tvConnected || store.applyingBrightness).accessibilityLabel("TV brightness")
-                if !store.tvConnected { Button("Connect TV") { Task { await store.connectTV() } }.disabled(store.tvConnecting) }
+                }.disabled(!store.tvConnected || store.applyingBrightness || store.tvPowerBusy).accessibilityLabel("TV brightness")
+                if !store.tvConnected { Button("Connect TV") { Task { await store.connectTV() } }.disabled(store.tvConnecting || store.tvPowerBusy) }
             }
+            TVPowerControls(store: store, remote: remote)
             Divider()
             VStack(alignment: .leading, spacing: 8) {
                 HStack {

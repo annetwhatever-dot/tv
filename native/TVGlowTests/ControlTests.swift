@@ -2,12 +2,15 @@ import XCTest
 
 @MainActor
 final class MockTV: TVCommunicating {
+    var powerOffs = 0
+    var powerFailure = false
     var value = 0
     var written: [Int] = []
     var refuseWrite = false
     func connect(host: String, key: String?, awaitingApproval: @escaping () -> Void) async throws -> String { "test-key" }
     func brightness() async throws -> Int { value }
     func setBrightness(_ value: Int) async throws { written.append(value); if !refuseWrite { self.value = value } }
+    func powerOff() async throws { if powerFailure { throw ControlError.disconnected }; powerOffs += 1 }
     func disconnect() {}
 }
 

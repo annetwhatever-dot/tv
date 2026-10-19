@@ -5,6 +5,9 @@ import Combine
 final class ControlStore: ObservableObject {
     @Published var tvAddress: String
     @Published var sonosAddress: String
+    @Published var tvMAC: String
+    @Published var wakeWithAppleTV: Bool { didSet { defaults.set(wakeWithAppleTV, forKey: "wakeWithAppleTV") } }
+    @Published private(set) var tvPowerBusy = false
     @Published private(set) var tvConnected = false
     @Published private(set) var tvConnecting = false
     @Published private(set) var awaitingTVApproval = false
@@ -26,6 +29,7 @@ final class ControlStore: ObservableObject {
     @Published private(set) var sonosMessage = "Connecting to your soundbar…"
     @Published private(set) var sonosError = false
 
+    private let wakeSender: TVWakeSending
     private let tv: TVCommunicating
     private let sonos: SonosCommunicating
     private let vault: PairingStoring
@@ -36,11 +40,14 @@ final class ControlStore: ObservableObject {
     private var started = false
 
     init(tv: TVCommunicating? = nil, sonos: SonosCommunicating? = nil,
-         vault: PairingStoring = PairingStore(), defaults: UserDefaults = .standard) {
+         vault: PairingStoring = PairingStore(), wakeSender: TVWakeSending? = nil, defaults: UserDefaults = .standard) {
         self.tv = tv ?? WebOSClient()
+        self.wakeSender = wakeSender ?? WakeOnLAN()
         self.sonos = sonos ?? SonosClient()
         self.vault = vault
         self.defaults = defaults
+        self.tvMAC = defaults.string(forKey: "tvMAC") ?? "74:E6:B8:2D:7F:2C"
+        self.wakeWithAppleTV = defaults.object(forKey: "wakeWithAppleTV") as? Bool ?? true
         self.tvAddress = defaults.string(forKey: "tvAddress") ?? "192.168.2.159"
         self.sonosAddress = defaults.string(forKey: "sonosAddress") ?? "192.168.0.206"
     }
@@ -63,8 +70,8 @@ final class ControlStore: ObservableObject {
         }
     }
 
-    func connectTV() async {
-        guard !tvConnecting, !applyingBrightness else { return }
+    func connectTV(whileWaking: Bool = false) async {
+        guard (!tvPowerBusy || whileWaking), !tvConnecting, !applyingBrightness else { return }
         tvConnecting = true
         tvConnected = false
         tvError = false
@@ -88,6 +95,59 @@ final class ControlStore: ObservableObject {
             tvMessage = "Live from your TV."
         } catch {
             tv.disconnect()
+            tvMessage = error.localizedDescription
+            tvError = true
+        }
+    }
+
+    func turnOffTV() async {
+        guard tvConnected, !tvPowerBusy, !tvConnecting, !applyingBrightness, !editingBrightness else { return }
+        tvPowerBusy = true; tvError = false
+        tvMessage = "Turning off the TV…"
+        defer { tvPowerBusy = false }
+        do {
+            try await tv.powerOff()
+            tv.disconnect()
+            tvConnected = false
+            brightness = nil
+            tvMessage = "TV accepted the power-off command."
+        } catch {
+            tvMessage = "Power off was not confirmed: \(error.localizedDescription)"
+            tvError = true
+        }
+    }
+
+    func turnOnTV(appleWake: (() -> Void)? = nil) async {
+        guard !tvPowerBusy, !tvConnecting, !applyingBrightness, !editingBrightness else { return }
+        tvPowerBusy = true; tvError = false
+        defer { tvPowerBusy = false }
+        do {
+            let host = try LocalAddress.validated(tvAddress)
+            // Validate before sending either kind of wake command.
+            _ = try WakeOnLAN.packet(mac: tvMAC)
+            try wakeSender.send(host: host, mac: tvMAC)
+            defaults.set(tvMAC, forKey: "tvMAC")
+            if wakeWithAppleTV { appleWake?() }
+            tvMessage = "Wake sent. Waiting for the TV…"
+            guard vault.key(for: host) != nil else {
+                tvMessage = "Wake sent. Click Connect TV once it is on to pair."
+                return
+            }
+            // Probe the port before pairing, so an off TV cannot hang registration.
+            for _ in 0..<10 {
+                if await wakeSender.isReachable(host: host) {
+                    await connectTV(whileWaking: true)
+                    if tvConnected {
+                        tvMessage = "TV is reachable. Brightness is \(brightness ?? 0)%."
+                        return
+                    }
+                    if awaitingTVApproval { return }
+                }
+                try await Task.sleep(nanoseconds: 1_000_000_000)
+            }
+            tvMessage = "Wake sent, but TV did not reconnect. Enable TV On with Mobile on LG, or connect Apple TV for HDMI-CEC wake. Wake-on-LAN may be blocked between network subnets."
+            tvError = true
+        } catch {
             tvMessage = error.localizedDescription
             tvError = true
         }
@@ -117,14 +177,15 @@ final class ControlStore: ObservableObject {
     }
 
     func refresh() async {
-        if tvConnected && !tvConnecting && !applyingBrightness && !editingBrightness {
+        if tvConnected && !tvPowerBusy && !tvConnecting && !applyingBrightness && !editingBrightness {
             do {
                 let value = try await tv.brightness()
-                if !applyingBrightness && !editingBrightness {
+                if tvConnected && !tvPowerBusy && !applyingBrightness && !editingBrightness {
                     brightness = value
                     brightnessDraft = Double(value)
                 }
             } catch {
+                guard !tvPowerBusy, tvConnected else { return }
                 tvConnected = false
                 tvMessage = "TV disconnected. Switch it on and reconnect."
                 tvError = true
@@ -143,7 +204,7 @@ final class ControlStore: ObservableObject {
     }
 
     func setBrightness(_ target: Int) async {
-        guard tvConnected, !applyingBrightness, (0...100).contains(target) else { return }
+        guard tvConnected, !tvPowerBusy, !applyingBrightness, (0...100).contains(target) else { return }
         applyingBrightness = true
         tvError = false
         tvMessage = "Adjusting the glow…"
@@ -209,7 +270,7 @@ final class ControlStore: ObservableObject {
     }
 
     func forgetTV() {
-        guard !tvConnecting, !applyingBrightness else { return }
+        guard !tvConnecting, !tvPowerBusy, !applyingBrightness else { return }
         if let host = tvHost ?? (try? LocalAddress.validated(tvAddress)) { vault.remove(for: host) }
         tv.disconnect()
         tvConnected = false

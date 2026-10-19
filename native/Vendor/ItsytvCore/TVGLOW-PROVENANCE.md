@@ -11,6 +11,7 @@ Only runtime sources are vendored. Upstream tests and project instructions are o
 TV Glow changes:
 
 - The Apple TV credential service derives from the host app's bundle ID. Dev and Release therefore never use the upstream app's credentials or each other's credentials.
+- Debug builds of TV Glow use private 0700/0600 sandbox files for development credentials, avoiding ad hoc signature Keychain prompts. They never migrate existing Keychain entries. Release keeps using Keychain.
 - Pairing readiness is exposed so PIN entry waits for the TV challenge; disconnect clears a previous challenge.
 - Intentional disconnect clears callbacks, preventing a cancelled connection from starting an unwanted reconnect.
 - Client names and logging use the host TV Glow app identity.

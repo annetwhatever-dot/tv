@@ -15,8 +15,14 @@ public enum KeychainStorage {
         serviceIdentifier(for: Bundle.main.bundleIdentifier ?? "com.anna.tvglow.unknown")
     }
 
+    private static var development: DevelopmentCredentialStore? {
+        guard let id = Bundle.main.bundleIdentifier, DevelopmentCredentialStore.isEnabled(bundleIdentifier: id) else { return nil }
+        return DevelopmentCredentialStore(namespace: service)
+    }
+
     public static func save(credentials: HAPCredentials, for deviceID: String) throws {
         let data = try JSONEncoder().encode(credentials)
+        if let development { try development.save(data, for: deviceID); return }
 
         // Delete existing entry first
         let deleteQuery: [String: Any] = [
@@ -41,6 +47,10 @@ public enum KeychainStorage {
     }
 
     public static func load(for deviceID: String) -> HAPCredentials? {
+        if let development {
+            guard let data = development.data(for: deviceID) else { return nil }
+            return try? JSONDecoder().decode(HAPCredentials.self, from: data)
+        }
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrService as String: service,
@@ -67,6 +77,7 @@ public enum KeychainStorage {
     }
 
     public static func delete(for deviceID: String) {
+        if let development { try? development.remove(for: deviceID); return }
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrService as String: service,
@@ -76,6 +87,7 @@ public enum KeychainStorage {
     }
 
     public static func allPairedDeviceIDs() -> [String] {
+        if let development { return development.accounts() }
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrService as String: service,

@@ -1,12 +1,12 @@
 # TV Glow — native Apple apps
 
-The macOS SwiftUI app controls Anna’s LG C1 OLED brightness and Sonos Arc Ultra volume directly over the home network. It has a main window, a menu-bar panel, brightness presets, precise +/- controls, volume/mute, and a standalone Apple TV remote. The native apps do not use the Python/web server.
+The macOS SwiftUI app controls Anna’s LG C1 OLED brightness and Sonos Arc Ultra volume directly over the home network. It has a main window, a menu-bar panel, brightness presets, precise +/- controls, volume/mute, a standalone Apple TV remote, and TV power buttons. The native apps do not use the Python/web server.
 
 The installed Mac app is `/Users/anna/Applications/TV Glow.app`. Open it from Finder, Spotlight or Launchpad. Click the sun in the menu bar for quick controls. **Connections** lets you update each device’s IP address or forget this app’s TV pairing.
 
-Debug builds use the display name **TV Glow Dev** and bundle ID `com.anna.tvglow.mac.debug`; Release uses **TV Glow** and `com.anna.tvglow.mac`. Their sandbox preferences and Keychain services are separate. The iOS Debug bundle ID likewise ends in `.debug`. Install Debug builds as `TV Glow Dev.app`, never over the Release app. Pair each build independently. The earlier shared `com.anna.tvglow.pairing` entry is no longer queried or migrated, so it can be denied without entering a password.
+Debug builds use the display name **TV Glow Dev** and bundle ID `com.anna.tvglow.mac.debug`; Release uses **TV Glow** and `com.anna.tvglow.mac`. Their sandbox preferences and credential storage are separate. Release stores LG and Apple TV pairing in Keychain. Debug stores development-only pairing in private sandbox files (directory 0700, file 0600; not encrypted), so changing ad hoc signatures no longer prompts for the login Keychain password. Debug does not read or migrate the previous development Keychain entries; pair once again after this change. The iOS Debug bundle ID likewise ends in `.debug`. Install Debug builds as `TV Glow Dev.app`, never over the Release app. Pair each build independently. The earlier shared `com.anna.tvglow.pairing` entry is no longer queried or migrated, so it can be denied without entering a password.
 
-Ad hoc signatures change when app code changes. Separate IDs prevent development builds from touching production pairings; a stable Apple development/distribution signing identity is the longer-term solution for Keychain trust across signed app updates.
+Ad hoc signatures change when app code changes. Separate IDs prevent development builds from touching production pairings; a stable Apple development/distribution signing identity is the longer-term solution for Release Keychain trust across signed app updates. Debug uses its isolated file store to avoid that rebuild problem.
 
 Known devices:
 
@@ -36,9 +36,15 @@ Tests use fake devices and never change real brightness, volume or mute. They co
 
 ## Apple TV remote
 
-The middle card discovers Apple TVs through Bonjour. Choose a device, click **Connect**, and enter the four-digit code displayed on the TV. Pairing credentials are stored in this app’s own Keychain namespace, separately for Debug and Release. Opening the app discovers devices without automatically connecting or sending remote commands.
+The middle card discovers Apple TVs through Bonjour. Choose a device, click **Connect**, and enter the four-digit code displayed on the TV. Release pairing credentials are stored in this app’s own Keychain namespace; Debug uses its private development file store. Opening the app discovers devices without automatically connecting or sending remote commands.
 
-The remote includes a direction pad, Select, Back, Home and Play/Pause. Click the pad to use arrow keys, Return, Space and Escape. Text entry is available when a search/text field is focused on Apple TV. Menu-bar controls include Back, Play/Pause and Home after connecting. This is our own native remote using community Companion/MRP protocol implementations, rather than an embedded system iPhone Remote. Siri voice and Apple’s Control Center interface are not included. The Dev app has paired successfully with Anna’s Apple TV named `tv`. Playback/navigation/text behavior needs user-visible verification; unit tests use fakes.
+The remote includes a direction pad, Select, Back, Home and Play/Pause. Click the pad to use arrow keys, Return, Space and Escape. Text entry is available when a search/text field is focused on Apple TV. Menu-bar controls include Back, Play/Pause and Home after connecting. This is our own native remote using community Companion/MRP protocol implementations, rather than an embedded system iPhone Remote. Siri voice and Apple’s Control Center interface are not included. The Dev app has paired successfully with Anna’s Apple TV named `tv`. Anna confirmed that the TV power-on action worked through the paired Apple TV. Navigation/playback/text commands still need separate user-visible checks; unit tests use fakes.
+
+## TV power
+
+**Turn on** and **Turn off** are at the top of the LG card and in the menu-bar panel. Off sends LG’s `system/turnOff` command and reports whether the TV acknowledged it. On sends a Wake-on-LAN packet to the configured LG address and the local broadcast address. If **Also wake connected Apple TV (HDMI-CEC)** is enabled in Connections, it also sends Apple TV’s Wake command. Pair/connect Apple TV before using this route. Anna confirmed this power-on action worked.
+
+Connections includes the TV’s wired MAC (`74:E6:B8:2D:7F:2C` by default). LG network wake requires **TV On with Mobile**; wake across routed subnets depends on the router. Apple TV wake needs HDMI-CEC / LG Simplink and **Control TVs and Receivers** on Apple TV. After wake, the app probes LG’s port and reads brightness when reconnecting. A sent wake packet alone is never shown as a confirmed TV connection. No brightness preset or volume change is applied by power actions.
 
 ## iOS groundwork
 
@@ -54,7 +60,7 @@ The iOS target is groundwork, not yet delivered. This Mac currently reports that
 
 ## Verified on Anna’s devices
 
-The native release connected to both devices. A brightness command of 0% was accepted and read back as 0%. Sonos volume was lowered from 45 to 44 through the native app, then restored to 45 and read back. Live tests never increased TV brightness. Fourteen macOS unit tests passed, including remote discovery without automatic commands, PIN validation, offline command guards, timeouts and isolated Keychain namespaces. Brightness fallback handles the C1’s 500/unsupported-key response to direct writes.
+The native release connected to both devices. A brightness command of 0% was accepted and read back as 0%. Sonos volume was lowered from 45 to 44 through the native app, then restored to 45 and read back. Live tests never increased TV brightness. Twenty macOS unit tests passed, including remote discovery without automatic commands, PIN validation, offline command guards, timeouts and isolated Keychain namespaces. Brightness fallback handles the C1’s 500/unsupported-key response to direct writes.
 
 ## Protocols and attribution
 

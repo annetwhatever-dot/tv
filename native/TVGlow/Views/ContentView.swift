@@ -39,12 +39,12 @@ struct ContentView: View {
     @ViewBuilder private var deviceControls: some View {
         #if os(macOS)
         HStack(alignment: .top, spacing: 18) {
-            BrightnessCard(store: store, showConnections: { showingConnections = true }).frame(maxWidth: .infinity)
+            BrightnessCard(store: store, remote: remote, showConnections: { showingConnections = true }).frame(maxWidth: .infinity)
             AppleRemoteCard(remote: remote).frame(maxWidth: .infinity)
             VolumeCard(store: store, showConnections: { showingConnections = true }).frame(maxWidth: .infinity)
         }
         #else
-        BrightnessCard(store: store, showConnections: { showingConnections = true })
+        BrightnessCard(store: store, remote: remote, showConnections: { showingConnections = true })
         AppleRemoteCard(remote: remote)
         VolumeCard(store: store, showConnections: { showingConnections = true })
         #endif
@@ -67,6 +67,7 @@ struct ContentView: View {
 
 struct BrightnessCard: View {
     @ObservedObject var store: ControlStore
+    @ObservedObject var remote: AppleRemoteStore
     let showConnections: () -> Void
 
     var body: some View {
@@ -78,8 +79,9 @@ struct BrightnessCard: View {
                         Text("LG C1 · OLED brightness").font(.system(size: 10)).foregroundStyle(GlowTheme.muted)
                     }
                     Spacer()
-                    ConnectionBadge(connected: store.tvConnected, busy: store.tvConnecting)
+                    ConnectionBadge(connected: store.tvConnected, busy: store.tvConnecting || store.tvPowerBusy)
                 }
+                TVPowerControls(store: store, remote: remote).padding(.top, 15)
                 GlowOrb(level: store.brightnessDraft).frame(height: 110).padding(.top, 8)
                 HStack(alignment: .firstTextBaseline, spacing: 4) {
                     Text(store.brightness == nil ? "—" : "\(Int(store.brightnessDraft))")
@@ -100,14 +102,14 @@ struct BrightnessCard: View {
                     .accessibilityIdentifier("brightnessSlider")
                     RoundControl(symbol: "plus", label: "Increase brightness by 5") { set(min(100, Int(store.brightnessDraft) + 5)) }
                 }
-                .disabled(!store.tvConnected || store.applyingBrightness)
+                .disabled(!store.tvConnected || store.applyingBrightness || store.tvPowerBusy)
                 HStack(spacing: 10) {
                     preset("Night", symbol: "moon", value: 15)
                     preset("Everyday", symbol: "sun.horizon", value: 45)
                     preset("Bright", symbol: "sun.max", value: 80)
                 }
                 .padding(.top, 17)
-                .disabled(!store.tvConnected || store.applyingBrightness)
+                .disabled(!store.tvConnected || store.applyingBrightness || store.tvPowerBusy)
                 if !store.tvConnected {
                     Button { Task { await store.connectTV() } } label: {
                         HStack(spacing: 8) {
@@ -116,7 +118,7 @@ struct BrightnessCard: View {
                         }.font(.system(size: 12, weight: .medium)).frame(maxWidth: .infinity).padding(.vertical, 11)
                     }
                     .buttonStyle(.plain).background(GlowTheme.lime.opacity(0.12), in: RoundedRectangle(cornerRadius: 10))
-                    .foregroundStyle(GlowTheme.lime).padding(.top, 15).disabled(store.tvConnecting)
+                    .foregroundStyle(GlowTheme.lime).padding(.top, 15).disabled(store.tvConnecting || store.tvPowerBusy)
                     .accessibilityIdentifier("connectTVButton")
                 }
                 Text(store.tvMessage).font(.system(size: 10)).foregroundStyle(store.tvError ? .orange : GlowTheme.muted)
